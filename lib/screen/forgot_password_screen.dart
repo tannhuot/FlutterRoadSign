@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mit_final_project/widgets/cts_progress_widget.dart';
 
-import '../constants/style.dart';
+import '../widgets/cts_progress_widget.dart';
 import '../widgets/cts_elevated_button.dart';
 import '../widgets/cts_textfield.dart';
 import '../widgets/cts_app_bar_widget.dart';
@@ -16,7 +15,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _emailController = TextEditingController();
 
-  bool _isRequesting = false;
+  final bool _isRequesting = false;
 
   @override
   void dispose() {
@@ -55,15 +54,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               controller: _emailController,
             ),
             const Spacer(),
-            CTSElevatedButton(
-              width: MediaQuery.of(context).size.width,
-              height: 50,
-              title: "Forgot Password",
-              onPress: () {
-                setState(() {
-                  // _isRequesting = true;
-                });
-              },
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: CTSElevatedButton(
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+                title: "Forgot Password",
+                onPress: () {
+                  setState(() {
+                    // _isRequesting = true;
+                  });
+                },
+              ),
             )
           ],
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mit_final_project/widgets/cts_app_bar_widget.dart';
 import 'package:mit_final_project/widgets/cts_elevated_button.dart';
+import 'package:mit_final_project/widgets/cts_scrollView.dart';
 import 'package:mit_final_project/widgets/cts_textfield.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -36,59 +37,64 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(
-          top: 20,
           left: 15,
           right: 15,
         ),
-        child: Column(
-          children: [
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const SizedBox(
-                    width: 200,
-                    height: 200,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.red,
+        child: CTSScrollView.buildScrollView(
+          ctx: context,
+          child: Column(
+            children: [
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top: 15),
+                      child: SizedBox(
+                        width: 200,
+                        height: 200,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.red,
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 30),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Image.asset("assets/images/info.png"))
-                ],
+                    const SizedBox(width: 30),
+                    IconButton(
+                        onPressed: () {},
+                        icon: Image.asset("assets/images/info.png"))
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 35,
-            ),
-            CTSTextField(
-              placeHolder: "Enter your First Name",
-              title: "First Name",
-              controller: _firstNameController,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            CTSTextField(
-              placeHolder: "Enter your Last Name",
-              title: "Last Name",
-              controller: _lastNameController,
-            ),
-            const Spacer(),
-            CTSElevatedButton(
-              width: MediaQuery.of(ctx).size.width - 30,
-              height: 50,
-              title: "Save",
-              fontsize: 20,
-              onPress: () {
-                print(_firstNameController.text);
-                print(_lastNameController.text);
-              },
-            )
-          ],
+              const SizedBox(
+                height: 35,
+              ),
+              CTSTextField(
+                placeHolder: "Enter your First Name",
+                title: "First Name",
+                controller: _firstNameController,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              CTSTextField(
+                placeHolder: "Enter your Last Name",
+                title: "Last Name",
+                controller: _lastNameController,
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: CTSElevatedButton(
+                  width: MediaQuery.of(ctx).size.width - 30,
+                  height: 50,
+                  title: "Save",
+                  fontsize: 20,
+                  onPress: () {},
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

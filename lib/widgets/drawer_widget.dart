@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
 
+import '../helper/sharepreference.dart';
+import '../models/profile_model.dart';
 import '../screen/profile_screen.dart';
 import '../screen/setting_screen.dart';
 import '../screen/sign_in_screen.dart';
 
-class DrawerWidget extends StatelessWidget {
+class DrawerWidget extends StatefulWidget {
   const DrawerWidget({Key? key}) : super(key: key);
+
+  @override
+  State<DrawerWidget> createState() => _DrawerWidgetState();
+}
+
+class _DrawerWidgetState extends State<DrawerWidget> {
+  ProfileModel profile = ProfileModel();
+
+  @override
+  void initState() {
+    loadProfile();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +41,22 @@ class DrawerWidget extends StatelessWidget {
                   ),
                 );
               },
-              child: const CircleAvatar(
-                backgroundColor: Colors.red,
-              ),
+              child: profile.data?.avatar != null
+                  ? CircleAvatar(
+                      backgroundColor: Colors.white,
+                      backgroundImage: NetworkImage(profile.data?.avatar ?? ""),
+                    )
+                  : const CircleAvatar(
+                      backgroundColor: Colors.white,
+                    ),
             ),
           ),
           const SizedBox(
             height: 10,
           ),
-          const Text(
-            "Ty Ty",
-            style: TextStyle(
+          Text(
+            profile.data?.firstName ?? "N/A",
+            style: const TextStyle(
                 color: Colors.black, fontSize: 28, fontWeight: FontWeight.bold),
           ),
           const SizedBox(
@@ -126,5 +146,15 @@ class DrawerWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  loadProfile() async {
+    try {
+      ProfileModel profileLoad =
+          ProfileModel.fromJson(await SharedPref.shared.read("profile"));
+      setState(() {
+        profile = profileLoad;
+      });
+    } catch (_) {}
   }
 }

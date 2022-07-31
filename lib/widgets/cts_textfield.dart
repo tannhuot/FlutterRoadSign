@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
 class CTSTextField extends StatelessWidget {
-  const CTSTextField(
-      {Key? key,
-      required this.placeHolder,
-      required this.title,
-      required this.controller})
-      : super(key: key);
+  const CTSTextField({
+    Key? key,
+    required this.placeHolder,
+    required this.title,
+    required this.controller,
+    this.isPasswordField = false,
+  }) : super(key: key);
 
   final String placeHolder;
   final String title;
   final TextEditingController controller;
+  final bool isPasswordField;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,9 @@ class CTSTextField extends StatelessWidget {
           borderSide: BorderSide(color: Colors.black, width: 3),
         ),
       ),
+      autocorrect: false,
+      enableSuggestions: false,
+      obscureText: isPasswordField,
     );
   }
 }
