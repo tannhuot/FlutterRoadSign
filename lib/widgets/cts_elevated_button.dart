@@ -21,9 +21,6 @@ class CTSElevatedButton extends StatelessWidget {
     return SizedBox(
       width: width,
       height: height,
-      // decoration: BoxDecoration(
-      //   border: Border.all(color: Colors.white, width: 5),
-      // ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: const Color.fromRGBO(1, 11, 84, 1),

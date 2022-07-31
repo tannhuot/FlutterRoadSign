@@ -10,7 +10,7 @@ class DrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: const Color.fromRGBO(242, 246, 82, 1),
+      backgroundColor: Colors.white,
       child: SafeArea(
         child: Column(children: [
           SizedBox(
