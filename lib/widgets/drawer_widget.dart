@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mit_final_project/screen/profile_screen.dart';
-import 'package:mit_final_project/screen/setting_screen.dart';
+
+import '../screen/profile_screen.dart';
+import '../screen/setting_screen.dart';
+import '../screen/sign_in_screen.dart';
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({Key? key}) : super(key: key);
@@ -77,7 +79,13 @@ class DrawerWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(right: 15),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const SignInScreen(),
+                    ),
+                  );
+                },
                 style: const ButtonStyle(alignment: Alignment.centerRight),
                 child: const Text(
                   "Sign out",

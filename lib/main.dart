@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mit_final_project/screen/home_screen.dart';
 
-import './screen/home_screen.dart';
+import '../constants/style.dart';
+import '../screen/sign_in_screen.dart';
+// import './screen/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,17 +20,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         canvasColor: Colors.white,
         appBarTheme: const AppBarTheme(
-            backgroundColor: Color.fromRGBO(1, 11, 84, 1),
+            backgroundColor: Style.primaryColor,
             titleTextStyle: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Style.secondaryColor,
             ),
             iconTheme: IconThemeData(color: Colors.white),
             elevation: 0),
-        primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      home: const SignInScreen(),
     );
   }
 }

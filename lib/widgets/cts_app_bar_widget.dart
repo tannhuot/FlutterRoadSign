@@ -23,7 +23,7 @@ class CTSAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 class _CTSAppBarWidgetState extends State<CTSAppBarWidget> {
   @override
   Widget build(BuildContext context) {
-    return AppBar(actions: [
+    return AppBar(title: Text(widget.title), actions: [
       widget.isShowProfile
           ? IconButton(
               onPressed: () {
