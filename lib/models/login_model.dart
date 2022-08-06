@@ -1,17 +1,24 @@
 class LoginModel {
   LoginModel({
-    this.token,
+    this.refresh,
+    this.access,
+    this.error,
   });
 
-  String? token;
+  String? refresh;
+  String? access;
+  String? error;
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
-        token: json["token"],
+        refresh: json["refresh"],
+        access: json["access"],
+        error: json["detail"],
       );
 
-  factory LoginModel.withError(String error) => LoginModel(token: "");
+  factory LoginModel.withError(String error) => LoginModel(error: error);
 
   Map<String, dynamic> toJson() => {
-        "token": token,
+        "refresh": refresh,
+        "access": access,
       };
 }

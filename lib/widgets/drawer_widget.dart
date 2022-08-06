@@ -41,10 +41,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   ),
                 );
               },
-              child: profile.data?.avatar != null
+              child: profile.data?.profilePhoto != null
                   ? CircleAvatar(
                       backgroundColor: Colors.white,
-                      backgroundImage: NetworkImage(profile.data?.avatar ?? ""),
+                      backgroundImage:
+                          NetworkImage(profile.data?.profilePhoto ?? ""),
                     )
                   : const CircleAvatar(
                       backgroundColor: Colors.white,
@@ -100,6 +101,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               padding: const EdgeInsets.only(right: 15),
               child: TextButton(
                 onPressed: () {
+                  SharedPref.shared.remove("profile");
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => const SignInScreen(),

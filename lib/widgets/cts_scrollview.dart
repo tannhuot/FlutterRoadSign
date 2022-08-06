@@ -6,7 +6,8 @@ class CTSScrollView {
       child: SizedBox(
         height: MediaQuery.of(ctx).size.height -
             const Size.fromHeight(kToolbarHeight).height -
-            MediaQuery.of(ctx).viewPadding.top,
+            MediaQuery.of(ctx).viewPadding.top -
+            MediaQuery.of(ctx).viewPadding.bottom,
         child: child,
       ),
     );

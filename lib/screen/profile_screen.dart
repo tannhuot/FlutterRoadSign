@@ -1,8 +1,14 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:mit_final_project/widgets/cts_app_bar_widget.dart';
-import 'package:mit_final_project/widgets/cts_elevated_button.dart';
-import 'package:mit_final_project/widgets/cts_scrollView.dart';
-import 'package:mit_final_project/widgets/cts_textfield.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../widgets/cts_app_bar_widget.dart';
+import '../widgets/cts_elevated_button.dart';
+import '../widgets/cts_scrollView.dart';
+import '../widgets/cts_textfield.dart';
+import '../helper/sharepreference.dart';
+import '../models/profile_model.dart';
+import '../http/http_request.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -14,6 +20,14 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
+
+  XFile? image;
+
+  @override
+  void initState() {
+    loadProfile();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -49,19 +63,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 15),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15),
                       child: SizedBox(
                         width: 200,
                         height: 200,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.red,
-                        ),
+                        child: image == null
+                            ? const CircleAvatar(
+                                backgroundColor: Colors.red,
+                              )
+                            : CircleAvatar(
+                                backgroundImage: FileImage(File(image!.path)),
+                              ),
                       ),
                     ),
                     const SizedBox(width: 30),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _takePicture();
+                        },
                         icon: Image.asset("assets/images/info.png"))
                   ],
                 ),
@@ -90,7 +110,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 50,
                   title: "Save",
                   fontsize: 20,
-                  onPress: () {},
+                  onPress: () {
+                    HttpRequest.updateProfile(
+                            firstName: _firstNameController.text,
+                            lastName: _lastNameController.text,
+                            profilePhoto: image!)
+                        .then((value) {
+                      if (value.data != null) {
+                        SharedPref.shared.save("profile", value);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Update success"),
+                          ),
+                        );
+                      }
+                    });
+                  },
                 ),
               )
             ],
@@ -98,5 +133,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
+  }
+
+  loadProfile() async {
+    try {
+      ProfileModel profileLoad =
+          ProfileModel.fromJson(await SharedPref.shared.read("profile"));
+      setState(() {
+        _firstNameController.text = profileLoad.data?.firstName ?? "";
+        _lastNameController.text = profileLoad.data?.lastName ?? "";
+      });
+    } catch (_) {}
+  }
+
+  Future _takePicture() async {
+    final imageFile = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, maxWidth: 200, maxHeight: 200);
+
+    if (imageFile == null) return;
+
+    setState(() {
+      image = imageFile;
+    });
   }
 }

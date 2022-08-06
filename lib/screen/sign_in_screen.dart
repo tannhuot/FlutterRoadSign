@@ -127,7 +127,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   );
                 },
               ),
-              _buildNoteWidget,
               const Spacer(),
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
@@ -140,25 +139,34 @@ class _SignInScreenState extends State<SignInScreen> {
                       _isRequesting = true;
                     });
 
-                    HttpRequest.login(
-                            _emailController.text, _passwordController.text)
+                    HttpRequest.signIn(
+                            email: _emailController.text,
+                            password: _passwordController.text)
                         .then(
                       (value) {
                         setState(() {
                           _isRequesting = false;
                         });
 
-                        if (value.token != null && value.token!.isNotEmpty) {
-                          HttpRequest.getProfile("2").then((value) {
-                            if (value.data != null) {
-                              SharedPref.shared.save("profile", value);
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) => const HomeScreen(),
+                        if (value.access != null && value.access!.isNotEmpty) {
+                          SharedPref.shared.save("token", value);
+
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("NEED USER ID"),
+                              content:
+                                  const Text("Need user id to get user detail"),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => _getProfile(),
+                                  child: const Text("Dismiss"),
                                 ),
-                              );
-                            }
-                          });
+                              ],
+                            ),
+                          );
+
+                          // _getProfile();
                         } else {
                           showDialog(
                             context: context,
@@ -187,20 +195,17 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  Widget get _buildNoteWidget {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Text("Use this for login (test API)"),
-        SizedBox(
-          height: 15,
-        ),
-        Text("Email: eve.holt@reqres.in"),
-        SizedBox(
-          height: 15,
-        ),
-        Text("Password: cityslicka"),
-      ],
-    );
+  _getProfile() {
+    // NEED USER ID
+    HttpRequest.getProfile("2").then((value) {
+      if (value.data != null) {
+        SharedPref.shared.save("profile", value);
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ),
+        );
+      }
+    });
   }
 }

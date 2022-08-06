@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../http/http_request.dart';
 import '../widgets/cts_scrollView.dart';
 import '../widgets/cts_progress_widget.dart';
 import '../widgets/cts_elevated_button.dart';
@@ -20,7 +21,7 @@ class _SignUpScreenScreenState extends State<SignUpScreen> {
   final _lastNameController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  final bool _isRequesting = false;
+  bool _isRequesting = false;
 
   @override
   void dispose() {
@@ -108,8 +109,68 @@ class _SignUpScreenScreenState extends State<SignUpScreen> {
                   height: 50,
                   title: "Sign Up",
                   onPress: () {
+                    if (_passwordController.text !=
+                        _confirmPasswordController.text) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text("Sign up Error"),
+                          content: const Text("Something went wrong!"),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text("Dismiss"),
+                            ),
+                          ],
+                        ),
+                      );
+                      return;
+                    }
+
                     setState(() {
-                      // _isRequesting = true;
+                      _isRequesting = true;
+                    });
+
+                    HttpRequest.signUp(
+                      firstName: _firstNameController.text,
+                      lastName: _lastNameController.text,
+                      email: _emailController.text,
+                      password: _passwordController.text,
+                    ).then((value) {
+                      setState(() {
+                        _isRequesting = false;
+                      });
+                      if (value.data?.id != null) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(
+                              SnackBar(
+                                content: WillPopScope(
+                                    child: const Text("Sign up success"),
+                                    onWillPop: () async {
+                                      ScaffoldMessenger.of(context)
+                                          .removeCurrentSnackBar();
+                                      return true;
+                                    }),
+                              ),
+                            )
+                            .closed
+                            .then((_) => null);
+                        Navigator.of(context).pop();
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text("Sign up Error"),
+                            content: const Text("Something went wrong!"),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: const Text("Dismiss"),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     });
                   },
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mit_final_project/http/http_request.dart';
 import 'package:mit_final_project/widgets/cts_app_bar_widget.dart';
 
 import '../widgets/cts_picker_button.dart';
@@ -107,7 +108,13 @@ class _SettingScreenState extends State<SettingScreen> {
                 height: 50,
                 title: "Save",
                 fontsize: 20,
-                onPress: () {},
+                onPress: () {
+                  HttpRequest.updateSetting(
+                      id: 3,
+                      languageId: 1,
+                      isLocationOn: true,
+                      isSoundOn: true);
+                },
               )
             ],
           ),
