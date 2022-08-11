@@ -20,7 +20,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
-
+  String? imageProfile;
   XFile? image;
 
   @override
@@ -69,9 +69,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: 200,
                         height: 200,
                         child: image == null
-                            ? const CircleAvatar(
-                                backgroundColor: Colors.red,
-                              )
+                            ? CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    HttpRequest.mainUrl + imageProfile!))
                             : CircleAvatar(
                                 backgroundImage: FileImage(File(image!.path)),
                               ),
@@ -142,6 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         _firstNameController.text = profileLoad.data?.firstName ?? "";
         _lastNameController.text = profileLoad.data?.lastName ?? "";
+        imageProfile = profileLoad.data?.profilePhoto;
       });
     } catch (_) {}
   }

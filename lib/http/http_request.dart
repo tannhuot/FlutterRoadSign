@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mit_final_project/models/traffic_sign_model.dart';
 
 import '../helper/sharepreference.dart';
 import '../models/login_model.dart';
@@ -66,7 +67,7 @@ class HttpRequest {
     try {
       var token = LoginModel.fromJson(await SharedPref.shared.read("token"));
       dio.options.headers = {"Authorization": "Bearer ${token.access}"};
-      Response response = await dio.get("$mainUrl/api/user/$id/");
+      Response response = await dio.get("$mainUrl/api/user/profile/");
       if (kDebugMode) {
         print(response);
       }
@@ -141,6 +142,24 @@ class HttpRequest {
         print(error);
       }
       return ProfileModel.withError("$error");
+    }
+  }
+
+  // Traffic Sign
+  static Future<TrafficSignModel> getTrafficSign() async {
+    try {
+      var token = LoginModel.fromJson(await SharedPref.shared.read("token"));
+      dio.options.headers = {"Authorization": "Bearer ${token.access}"};
+      Response response = await dio.get("$mainUrl/api/sign/list/");
+      if (kDebugMode) {
+        print(response);
+      }
+      return TrafficSignModel.fromJson(response.data);
+    } catch (error) {
+      if (kDebugMode) {
+        print(error);
+      }
+      return TrafficSignModel();
     }
   }
 }
