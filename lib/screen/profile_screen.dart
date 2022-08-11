@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mit_final_project/widgets/cts_progress_widget.dart';
 
 import '../widgets/cts_app_bar_widget.dart';
 import '../widgets/cts_elevated_button.dart';
@@ -21,7 +22,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
 
+  bool isRequesting = false;
+
   XFile? image;
+
+  ProfileModel profile = ProfileModel();
 
   @override
   void initState() {
@@ -43,7 +48,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: "Profile",
         isShowProfile: false,
       ),
-      body: _buildBody(context),
+      body: CTSProgressWidget(
+        isRequesting: isRequesting,
+        child: _buildBody(context),
+      ),
     );
   }
 
@@ -69,8 +77,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: 200,
                         height: 200,
                         child: image == null
-                            ? const CircleAvatar(
-                                backgroundColor: Colors.red,
+                            ? CircleAvatar(
+                                backgroundColor: Colors.white,
+                                backgroundImage: NetworkImage(
+                                    HttpRequest.mainUrl +
+                                        (profile.data?.profilePhoto ?? "")),
                               )
                             : CircleAvatar(
                                 backgroundImage: FileImage(File(image!.path)),
@@ -82,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onPressed: () {
                           _takePicture();
                         },
-                        icon: Image.asset("assets/images/info.png"))
+                        icon: Image.asset("assets/images/icons8-edit-64 1.png"))
                   ],
                 ),
               ),
@@ -111,16 +122,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   title: "Save",
                   fontsize: 20,
                   onPress: () {
+                    setState(() {
+                      isRequesting = true;
+                    });
                     HttpRequest.updateProfile(
                             firstName: _firstNameController.text,
                             lastName: _lastNameController.text,
-                            profilePhoto: image!)
+                            profilePhoto: image)
                         .then((value) {
-                      if (value.data != null) {
+                      setState(() {
+                        isRequesting = false;
+                      });
+                      if (value.data?.id != null) {
                         SharedPref.shared.save("profile", value);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text("Update success"),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Something went wrong!"),
                           ),
                         );
                       }
@@ -140,6 +163,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ProfileModel profileLoad =
           ProfileModel.fromJson(await SharedPref.shared.read("profile"));
       setState(() {
+        profile = profileLoad;
         _firstNameController.text = profileLoad.data?.firstName ?? "";
         _lastNameController.text = profileLoad.data?.lastName ?? "";
       });

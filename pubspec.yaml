@@ -66,7 +66,8 @@ flutter:
     - assets/images/history-32.png
     - assets/images/setting-64.png
     - assets/images/en-flag.png
-  #   - images/a_dot_ham.jpeg
+    - assets/images/personal-Profile.png
+    - assets/images/icons8-edit-64 1.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -151,22 +151,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         if (value.access != null && value.access!.isNotEmpty) {
                           SharedPref.shared.save("token", value);
 
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text("NEED USER ID"),
-                              content:
-                                  const Text("Need user id to get user detail"),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () => _getProfile(),
-                                  child: const Text("Dismiss"),
-                                ),
-                              ],
-                            ),
-                          );
-
-                          // _getProfile();
+                          _getProfile();
                         } else {
                           showDialog(
                             context: context,
@@ -196,8 +181,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   _getProfile() {
-    // NEED USER ID
-    HttpRequest.getProfile("2").then((value) {
+    HttpRequest.getProfile().then((value) {
       if (value.data != null) {
         SharedPref.shared.save("profile", value);
         Navigator.of(context).pushReplacement(

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
@@ -62,11 +63,11 @@ class HttpRequest {
   }
 
   // User Detail
-  static Future<ProfileModel> getProfile(String id) async {
+  static Future<ProfileModel> getProfile() async {
     try {
       var token = LoginModel.fromJson(await SharedPref.shared.read("token"));
       dio.options.headers = {"Authorization": "Bearer ${token.access}"};
-      Response response = await dio.get("$mainUrl/api/user/$id/");
+      Response response = await dio.get("$mainUrl/api/user/profile/");
       if (kDebugMode) {
         print(response);
       }
@@ -83,20 +84,26 @@ class HttpRequest {
   static Future<ProfileModel> updateProfile({
     required String firstName,
     required String lastName,
-    required XFile profilePhoto,
+    XFile? profilePhoto,
   }) async {
     try {
       var token = LoginModel.fromJson(await SharedPref.shared.read("token"));
       var profileLoad =
           ProfileModel.fromJson(await SharedPref.shared.read("profile"));
 
-      var formData = FormData.fromMap({
-        "id": profileLoad.data?.id.toString(),
+      final bytes = await profilePhoto?.readAsBytes();
+      final String strImg;
+      if (bytes != null) {
+        strImg = "data:image/jpeg;base64,${base64Encode(bytes)}";
+      } else {
+        strImg = "";
+      }
+      var formData = {
+        "id": profileLoad.data?.id ?? 0,
         "first_name": firstName,
         "last_name": lastName,
-        "profile_photo": await MultipartFile.fromFile(profilePhoto.path,
-            filename: profilePhoto.name)
-      });
+        "profile_photo": strImg
+      };
 
       dio.options.headers = {"Authorization": "Bearer ${token.access}"};
       Response response =
@@ -115,20 +122,22 @@ class HttpRequest {
 
   // Update setting
   static Future<ProfileModel> updateSetting({
-    required int id,
     required int languageId,
     required bool isLocationOn,
     required bool isSoundOn,
   }) async {
     try {
       var token = LoginModel.fromJson(await SharedPref.shared.read("token"));
+      var profileLoad =
+          ProfileModel.fromJson(await SharedPref.shared.read("profile"));
+
       var params = {
-        "id": id,
+        "id": profileLoad.data?.id ?? 0,
         "language_id": languageId,
         "is_location_on": isLocationOn,
         "is_sound_on": isSoundOn
       };
-
+      print(params);
       dio.options.headers = {"Authorization": "Bearer ${token.access}"};
       Response response =
           await dio.post("$mainUrl/api/user/setting/update/", data: params);

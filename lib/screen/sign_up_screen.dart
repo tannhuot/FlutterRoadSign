@@ -115,7 +115,7 @@ class _SignUpScreenScreenState extends State<SignUpScreen> {
                         context: context,
                         builder: (context) => AlertDialog(
                           title: const Text("Sign up Error"),
-                          content: const Text("Something went wrong!"),
+                          content: const Text("Password not match"),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () => Navigator.of(context).pop(),

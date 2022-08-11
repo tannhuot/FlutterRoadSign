@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mit_final_project/http/http_request.dart';
 
 import '../helper/sharepreference.dart';
 import '../models/profile_model.dart';
@@ -44,11 +45,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               child: profile.data?.profilePhoto != null
                   ? CircleAvatar(
                       backgroundColor: Colors.white,
-                      backgroundImage:
-                          NetworkImage(profile.data?.profilePhoto ?? ""),
+                      backgroundImage: NetworkImage(HttpRequest.mainUrl +
+                          (profile.data?.profilePhoto ?? "")),
                     )
                   : const CircleAvatar(
                       backgroundColor: Colors.white,
+                      backgroundImage:
+                          AssetImage("assets/images/personal-Profile.png"),
                     ),
             ),
           ),
