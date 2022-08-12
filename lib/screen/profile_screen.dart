@@ -24,9 +24,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   bool isRequesting = false;
 
+  String? imageProfile;
   XFile? image;
-
-  ProfileModel profile = ProfileModel();
 
   @override
   void initState() {
@@ -78,11 +77,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         height: 200,
                         child: image == null
                             ? CircleAvatar(
-                                backgroundColor: Colors.white,
                                 backgroundImage: NetworkImage(
-                                    HttpRequest.mainUrl +
-                                        (profile.data?.profilePhoto ?? "")),
-                              )
+                                    HttpRequest.mainUrl + imageProfile!))
                             : CircleAvatar(
                                 backgroundImage: FileImage(File(image!.path)),
                               ),
@@ -163,9 +159,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ProfileModel profileLoad =
           ProfileModel.fromJson(await SharedPref.shared.read("profile"));
       setState(() {
-        profile = profileLoad;
         _firstNameController.text = profileLoad.data?.firstName ?? "";
         _lastNameController.text = profileLoad.data?.lastName ?? "";
+        imageProfile = profileLoad.data?.profilePhoto;
       });
     } catch (_) {}
   }

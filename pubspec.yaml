@@ -32,6 +32,10 @@ dependencies:
   dio: ^4.0.4
   shared_preferences: ^2.0.15
   image_picker: ^0.8.5+3
+  tflite_flutter: ^0.9.0
+  tflite_flutter_helper: ^0.3.1
+  get: ^4.6.5
+  camera: ^0.9.8+1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -68,6 +72,9 @@ flutter:
     - assets/images/en-flag.png
     - assets/images/personal-Profile.png
     - assets/images/icons8-edit-64 1.png
+    - assets/detect.tflite
+    - assets/labelmap.txt
+  #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

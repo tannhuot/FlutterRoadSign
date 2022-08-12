@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mit_final_project/http/http_request.dart';
+import 'package:mit_final_project/models/traffic_sign_model.dart';
 import 'package:mit_final_project/widgets/cts_app_bar_widget.dart';
 
 class RoadSignDetailScreen extends StatelessWidget {
-  const RoadSignDetailScreen({Key? key}) : super(key: key);
+  final Data data;
+  const RoadSignDetailScreen({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,20 +20,32 @@ class RoadSignDetailScreen extends StatelessWidget {
               width: 300,
               height: 300,
               child: Image.network(
-                "https://picsum.photos/200",
+                HttpRequest.mainUrl + data.image!,
                 fit: BoxFit.fill,
               ),
             ),
             const SizedBox(
               height: 15,
             ),
-            const SizedBox(
+            SizedBox(
               width: 300,
               child: Text(
-                "Beware of road hump ahead.",
+                data.nameKh!,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Divider(),
+            SizedBox(
+              width: 300,
+              child: Text(
+                data.nameEn!,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),

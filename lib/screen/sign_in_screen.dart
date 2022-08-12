@@ -150,7 +150,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
                         if (value.access != null && value.access!.isNotEmpty) {
                           SharedPref.shared.save("token", value);
-
                           _getProfile();
                         } else {
                           showDialog(

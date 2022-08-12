@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mit_final_project/detection/ui/home_view.dart';
 import 'package:mit_final_project/screen/road_sign_screen.dart';
 import 'package:mit_final_project/widgets/cts_app_bar_widget.dart';
 import 'package:mit_final_project/widgets/cts_elevated_button.dart';
@@ -44,7 +45,13 @@ class HomeScreen extends StatelessWidget {
             height: 160,
             title: "Traffic Signs detection",
             fontsize: 30,
-            onPress: () {},
+            onPress: () {
+              Navigator.of(ctx).push(
+                MaterialPageRoute(
+                  builder: ((context) => HomeView()),
+                ),
+              );
+            },
           ),
         ],
       ),
